@@ -1,0 +1,286 @@
+<%= stylesheet_link_tag "ui-lightness/jquery-ui-1.8.custom", :media => "screen" %>
+<%= javascript_include_tag "jquery-ui-1.8.custom.min.js" %>
+<script type="text/javascript">
+    jQuery(document).ready(function($) {
+      $('a[rel*=facebox]').facebox({
+        loading_image : 'facebox/loading.gif',
+        close_image : 'facebox/closelabel.gif'
+      })
+       
+    })
+   <%#*$(function() {%>
+        <%#*$("#variant_start_#{variant.id}").datepicker();%>
+	<%#*});%>
+   <%#*$(function() {%>
+        <%#*$("#variant_end_#{variant.id}").datepicker();%>
+	<%#*});%>
+   function start_date_form(start){
+      start_date_id = start;
+      $("#"+start_date_id).datepicker();
+   }
+   function end_date_form(end){
+      end_date_id = end;
+      $("#"+end_date_id).datepicker();
+   }
+   function slide_form(v){
+     $("#set_for_auction_"+v).slideToggle('fast');
+   }
+   function cancel_form(v){
+     $("#set_for_auction_"+v).slideUp('fast');
+   }
+  </script>
+
+<div id="sidebar">
+  <h3>Where to start</h3>
+  <h4>Check out the <code style="font-size: 140%">home_controller</code></h4>
+
+  <p class="description">
+    The controller in this demo application fetches the latest 3 orders and products and makes them available as instance variables <code style="color: #218BCE">@orders</code> and <code style="color: #218BCE">@products</code>.
+  </p>
+
+  <h4>Check out the <code>index</code> template</h4>
+
+  <p class="description">
+    This is the Ruby template you are currently looking at. It is located at:<br />  
+  </p>
+
+  <p style="background: #fff; margin-left: 4px"><code>views/home/index.html.erb</code></p>
+
+  <p class="description">
+    Have a look at the markup and Ruby code to see how the Shopify API is being used.
+  </p>
+  
+  <h3>Additional documentation</h3>
+
+  <p class="description">
+    Become an expert:
+  </p>
+
+  <ul>
+    <li>
+      <%= link_to 'API documentation', 'http://www.shopify.com/developers/api/' %>
+      <span class="note">The reference: what you can do with the Shopify API.</span>
+    </li>
+    <li>
+      <%= link_to 'Wiki', 'http://wiki.shopify.com/' %>
+      <span class="note">Get more information and share your knowledge.</span>
+    </li>
+    <li>
+      <%= link_to 'Forum', 'http://forums.shopify.com/community' %>
+      <span class="note">Ask questions and see what others already wanted to know.</span>
+    </li>
+  </ul>
+
+  <h3>Once you're ready</h3>
+
+  <p class="description">
+    We'd love to see what you create using the Shopify API. 
+    Find out how to share your application with the world and read the latest information on the <%= link_to 'API Publishing Page', 'http://www.shopify.com/developers/publishing/' %>.
+  </p>
+</div>
+
+
+<%#*<div id="orders" style="display : none;">%>
+  <%#*<h2>Your recent orders</h2>%>
+
+  <%# if @orders.blank? %>
+
+    <%#*<em class="note">There are no orders in your store.</em>%>
+
+  <%# else %>
+
+    <%#*<ul>%>
+    <%# @orders.each do |order| %>
+      <%#*<li>%>
+        <%#*<div class="order box">%>
+          <%#*<div class="wrapper">%>
+            <%#*<strong>%>
+              <%#= link_to order.name, "http://#{current_shop.url}/admin/orders/#{order.id}" %>
+            <%#*</strong>%>
+            <%#*<span class="price">%>
+              <%#= order.total_price %>
+              <%#= order.currency %>
+            <%#*</span>%>
+            <%#*<span class="highlight">%>
+              <%#= order.financial_status %>
+            <%#*</span>%>
+            <%#*by <span class="note">%>
+              <%#= order.billing_address.name %>
+            <%#*</span>%>
+          <%#*</div>%>
+        <%#*</div>%>
+      <%#*</li>%>
+    <%# end %>
+    <%#*</ul>%>
+
+  <%# end %>
+<%#*</div>%>
+
+
+<h2>Products for Auction</h2>
+<% if not @product.blank? %>
+<h3>Create Auction for <%= link_to @product.title, "http://#{current_shop.url}/admin/products/#{@product.id}", {:target => "_blank"} %></h3>
+  <div class="product box">
+    <div class="wrapper" style="height: 20px;">
+      <div style="width:280px; margin-left: 30px;float: left;padding-top: 5px;">
+        <strong>Title</strong>
+        </div>
+        <div class="price" style="width:100px; margin-right: 20px;float: left;padding-top: 5px;">
+          <strong>Price (Per Unit)</strong>
+        </div>
+        <div style="width:50px; padding-right: 20px;float: left;padding-top: 5px;">
+          <strong>Quantity</strong>
+            <%#= text_field 'variant', 'end_date', :size => "10"  %>
+        </div>
+    </div>
+  </div>
+  <div id="new_product_list">
+    <% @product.variants.each do |variant| %>
+      <div id='set_bid_product_<%= variant.id%>'>
+        <div class="product box">
+          <div class="wrapper" style="height: 20px;">
+            <div style="width:280px; margin-right: 20px;float: left;padding-top: 5px;">
+              <%= variant.title %>
+            </div>
+            <div class="price" style="width:100px; margin-right: 20px;float: left;padding-top: 5px;text-align: center">
+              <%= variant.price %> <%= current_shop.shop.currency %>
+            </div>
+            <div style="width:50px; margin-left: 20px;float: left;padding-top: 5px;text-align: center">
+              <%= variant.inventory_quantity %>
+            </div>
+            <div style="width: 100px;margin-left: 25px;float: left">
+              <%#= link_to "Add to Auction", "#set_for_auction", :rel => "facebox"%>
+              <%= link_to_function "Add to Auction", :onclick => "slide_form('#{variant.id}');" %>
+            </div>
+            
+            <div style="width: 50px;margin-left: 10px;float: left">
+              <%= link_to "Remove", "#test", :rel => "facebox" %>
+            </div>
+          </div>
+          <div id="set_for_auction_<%= variant.id %>" style="display: none;" >
+            <% remote_form_for :variant, :url => {:action => "create_auction"} do |f|  %>
+              <table style="height:200px; width:100%;" border="0">
+                <%= hidden_field_tag 'product_id', :value => @product.id %>
+                <%= hidden_field_tag 'shop_url', :value => params[:shop] %>
+                <tr>
+                  <td style="height: auto; width: 100%;" colspan="4">
+                    <table border="0" style="width: 100%; height: 100%;" >
+                      <tr>
+                        <td rowspan="3" style="float: left; height: auto;">
+                          <%= image_tag @product.images.first.small rescue '' %>
+                        </td>
+                        <td style="height: 70px;width: 100%" colspan="3" >
+                          <table border="0" height="70px" width="100%" align="right">
+                            <tr>
+                              <td style="width: auto;">
+                                <table border="0" height="70px">
+                                  <tr>
+                                    <td style="height:20px;width: 120px;">
+                                      <strong>Name</strong>
+                                    </td>
+                                    <td style="height:20px;width: 200px;">
+                                      <%= variant.title %>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="height:20px;width: 120px;">
+                                      <strong>Rate(per unit)</strong>
+                                    </td>
+                                    <td style="height:20px;width: 200px;">
+                                      <%= "#{variant.price}"+" "+"#{current_shop.shop.currency}" %>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="height:20px;width: 120px;">
+                                      <strong>Stock Available</strong>
+                                    </td>
+                                    <td style="height:20px;width: 200px;">
+                                      <%= variant.inventory_quantity %>
+                                      
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                        <td rowspan="3" style="float: left; height: auto;">
+                          <strong>Add Deails</strong>
+                          <%= text_area "variant", "details", :rows=>"4", :size=> "25" %>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="height:20px; text-align: right">
+                    <strong>Start Date for Auction</strong>
+                  </td>
+                  <td style="height:20px;">
+                    <%= text_field 'variant_start', "#{variant.id}", :onclick => "start_date_form(this.id);", :size => "10"  %>
+                  </td>
+                  <td style="height:20px; text-align: right">
+                    <strong>Start Price for Auction</strong>
+                    <br>for one item</br>
+                  </td>
+                  <td style="height:20px;">
+                    <%= text_field 'variant', 'start_rate', :size => "3"  %>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="height:20px; text-align: right">
+                    <strong>End Date for Auction</strong>
+                  </td>
+                  <td style="height:20px;">
+                    <%= text_field 'variant_end', "#{variant.id}", :onclick => "end_date_form(this.id);", :size => "10"  %>
+                  </td>
+                  <td style="height:20px; text-align: right">
+                    <strong>Quantity placed for Auction</strong>
+                  </td>
+                  <td style="width:50px;padding-right: 20px;">
+                    <%= text_field 'variant', 'quantity', :size => "3"  %>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2"></td>
+                  <td style="text-align: right;" >
+                    <%= submit_tag "Start Auction" %>
+                  </td>
+                  <td style="text-align: left;">
+                    <%= link_to_function "Cancel", :onclick => "cancel_form('#{variant.id}');" %>
+                  </td>
+                </tr>
+              </table>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<% if @products.blank? %>
+
+  <em class="note">There are no products in your store.</em>
+
+<% else %>
+
+  <% @products.each do |product| %>
+    <div class="product box">
+      <div class="wrapper">
+        <% all_image = product.images %>
+        <% all_image.each do |image| %>
+          <%= image_tag image.small rescue '' %>
+        <% end %>
+        <h4><%= link_to product.title, "http://#{current_shop.url}/admin/products/#{product.id}" %></h4>
+
+        <p class="price"><%= product.price_range %> <%= current_shop.shop.currency %></p>
+        <p style="margin-bottom: 0"><%= product.product_type %> <span class="note">type</span></p>
+        <p style="margin: 0"><%= product.vendor %> <span class="note">vendor</span></p>
+      
+        <div style="clear:left"></div>
+      </div>
+    </div>
+  <% end %>
+
+<% end %>
